@@ -59,7 +59,7 @@ def find_user(db: Session=Depends(get_db), email: Optional[str]=None, spotify_id
 @user_router.get('/users', response_model=schemas.User)
 def read_users(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
     db_users = crud.get_users(db, skip=skip, limit=limit)
-    if bool(db_users):
+    if not bool(db_users):
         raise HTTPException(status_code=404, detail="users not found")
     return db_users
 
