@@ -24,42 +24,79 @@ The project tree is as follows:
 
 .
 └── spotify-clone
+
     ├── alembic # migration management
+
     ├── app # main module
+
     |   ├── crud
+
     |   |   ├── music.py
+
     |   |   └── user.py
+
     |   ├── models
+
     |   |   ├── music.py
+
     |   |   └── user.py
+
     |   ├── routers
+
     |   |   ├── music.py
+
     |   |   └── user.py
+
     |   ├── schemas
+
     |   |   ├── music.py
+
     |   |   └── user.py
+
     |   ├── config.py
+
     |   ├── database.py
+
     |   └── main.py
+
     ├── docs # useful docs
+
     |   └── 'spotify clone db e-r.pdf'
+
     ├── load_db # down and upload spotify data
+
     |   ├── files
+
     |   |   ├── albums.json
+
     |   |   ├── artists.json
+
     |   |   ├── playlists.json
+
     |   |   ├── tracks.json
+
     |   |   └── user.json
+
     |   ├── .env
+
     |   ├── download_data.py
+
     |   └── load_db.py
+
     ├── .env
+
     ├── .gitignore
+
     ├── alembic.ini
+
     ├── docker-compose.yml
+
     ├── Pipfile
+
     ├── Pipfile.lock
+
     └── README.md
+
 
 As mentioned before, this project was built using Docker (bonus no. 1), and various different  functionalities have been implemented, such as:
 
