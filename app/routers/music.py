@@ -137,6 +137,12 @@ def delete_track(track_id: int, db: Session=Depends(get_db)):
 def add_track_to_playlist(playlist_id: int, track_id: int, db: Session=Depends(get_db)):
     playlist = user_crud.get_playlist(db=db, playlist_id=playlist_id)
     track = crud.get_track(db=db, track_id=track_id)
+
+    if playlist is None:
+        raise HTTPException(status_code=404, detail="playlist not found")
+    if track is None:
+        raise HTTPException(status_code=404, detail="track not found")
+
     playlist.tracks.append(track)
     db.commit()
     db.refresh(playlist)
