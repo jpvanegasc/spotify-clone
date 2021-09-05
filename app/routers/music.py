@@ -54,7 +54,15 @@ def read_artists(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=De
         raise HTTPException(status_code=404, detail="artists not found")
     return artists
 
-# @artist_router.put('/artists/{artist_id}', response_model=schemas.Artist)
+@artist_router.put('/artists/{artist_id}', response_model=schemas.ArtistCreate)
+def update_artist(artist_id: int, artist: schemas.ArtistCreate, db: Session=Depends(get_db)):
+    db_artist = crud.get_artist(db=db, artist_id=artist_id)
+    if artist is None:
+        raise HTTPException(status_code=404, detail="artist not found")
+    db_artist.update(artist.dict())
+    db.commit()
+    db.refresh(db_artist)
+    return db_artist
 
 @artist_router.delete('/artists/{artist_id}', status_code=204)
 def delete_artist(artist_id: int, db: Session=Depends(get_db)):
@@ -88,7 +96,15 @@ def read_albums(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Dep
         raise HTTPException(status_code=404, detail="albums not found")
     return albums
 
-# @album_router.put('/albums/{album_id}', response_model=schemas.Album)
+@album_router.put('/albums/{album_id}', response_model=schemas.AlbumCreate)
+def update_album(album_id: int, album: schemas.AlbumCreate, db: Session=Depends(get_db)):
+    db_album = crud.get_album(db=db, album_id=album_id)
+    if album is None:
+        raise HTTPException(status_code=404, detail="album not found")
+    db_album.update(album.dict())
+    db.commit()
+    db.refresh(db_album)
+    return db_album
 
 @album_router.delete('/albums/{album_id}', status_code=204)
 def delete_album(album_id: int, db: Session=Depends(get_db)):
@@ -122,7 +138,15 @@ def read_tracks(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Dep
         raise HTTPException(status_code=404, detail="tracks not found")
     return tracks
 
-# @track_router.put('/tracks/{track_id}', response_model=schemas.Track)
+@album_router.put('/albums/{album_id}', response_model=schemas.AlbumCreate)
+def update_album(album_id: int, album: schemas.AlbumCreate, db: Session=Depends(get_db)):
+    db_album = crud.get_album(db=db, album_id=album_id)
+    if album is None:
+        raise HTTPException(status_code=404, detail="album not found")
+    db_album.update(album.dict())
+    db.commit()
+    db.refresh(db_album)
+    return db_album
 
 @track_router.delete('/tracks/{track_id}', status_code=204)
 def delete_track(track_id: int, db: Session=Depends(get_db)):
