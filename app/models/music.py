@@ -73,7 +73,7 @@ class Album(Base):
     id = Column(String, length=50, unique=True, index=True)
     images = Column(mutable_json_type(dbtype=JSONB, nested=True))
     label = Column(String, length=150)
-    name = Column(String, length=150, index=True)
+    name = Column(String, length=150)
     popularity = Column(Integer)
     release_date = Column(DateTime)
     release_date_precision = Column(String, length=50)
@@ -108,7 +108,7 @@ class Track(Base):
     __tablename__ = "tracks"
 
     _id = Column(Integer, primary_key=True, index=True)
-    album_id = Column(Integer, ForeignKey("albums._id"), index=True)
+    album_id = Column(Integer, ForeignKey("albums._id"))
     disc_number = Column(Integer)
     duration_ms = Column(Integer)
     explicit = Column(Boolean, default=False)
