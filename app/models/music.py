@@ -5,32 +5,22 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Boolean,DateTime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.postgresql import JSONB
 
-from sqlalchemy_json import mutable_json_type
-
 from app.database import Base
 
 class Artist(Base):
     """
-    external_urls
-    followers
-    genres
-    href
-    id
-    images
-    name
-    popularity
-    type
-    uri
+    _id: local DB id
+    id: spotify id
     """
     __tablename__ = "artists"
 
     _id = Column(Integer, primary_key=True, index=True)
-    external_urls = Column(mutable_json_type(dbtype=JSONB, nested=True))
-    followers = Column(mutable_json_type(dbtype=JSONB, nested=True))
-    genres = Column(mutable_json_type(dbtype=JSONB, nested=True))
+    external_urls = Column(JSONB)
+    followers = Column(JSONB)
+    genres = Column(JSONB)
     href = Column(String(length=150))
     id = Column(String(length=50), unique=True, index=True)
-    images = Column(mutable_json_type(dbtype=JSONB, nested=True))
+    images = Column(JSONB)
     name = Column(String(length=150), unique=True, index=True)
     popularity = Column(Integer)
     type = Column(String(length=50))
@@ -42,36 +32,20 @@ class Artist(Base):
 
 class Album(Base):
     """
-    album_type
-    artists
-    copyrights
-    external_ids
-    external_urls
-    genres
-    href
-    id
-    images
-    label
-    name
-    popularity
-    release_date
-    release_date_precision
-    total_tracks
-    tracks
-    type
-    uri
+    _id: local DB id
+    id: spotify id
     """
     __tablename__ = "albums"
 
     _id = Column(Integer, primary_key=True, index=True)
     album_type = Column(String(length=50))
-    copyrights = Column(mutable_json_type(dbtype=JSONB, nested=True))
-    external_ids = Column(mutable_json_type(dbtype=JSONB, nested=True))
-    external_urls = Column(mutable_json_type(dbtype=JSONB, nested=True))
-    genres = Column(mutable_json_type(dbtype=JSONB, nested=True))
+    copyrights = Column(JSONB)
+    external_ids = Column(JSONB)
+    external_urls = Column(JSONB)
+    genres = Column(JSONB)
     href = Column(String(length=150))
     id = Column(String(length=50), unique=True, index=True)
-    images = Column(mutable_json_type(dbtype=JSONB, nested=True))
+    images = Column(JSONB)
     label = Column(String(length=150))
     name = Column(String(length=150))
     popularity = Column(Integer)
@@ -87,23 +61,8 @@ class Album(Base):
 
 class Track(Base):
     """
-    album
-    artists
-    disc_number
-    duration_ms
-    explicit
-    external_ids
-    external_urls
-    href
-    id
-    is_local
-    is_playable
-    name
-    popularity
-    preview_url
-    track_number
-    type
-    uri
+    _id: local DB id
+    id: spotify id
     """
     __tablename__ = "tracks"
 
@@ -112,8 +71,8 @@ class Track(Base):
     disc_number = Column(Integer)
     duration_ms = Column(Integer)
     explicit = Column(Boolean, default=False)
-    external_ids = Column(mutable_json_type(dbtype=JSONB, nested=True))
-    external_urls = Column(mutable_json_type(dbtype=JSONB, nested=True))
+    external_ids = Column(JSONB)
+    external_urls = Column(JSONB)
     href = Column(String(length=150))
     id = Column(String(length=50), unique=True, index=True)
     is_local = Column(Boolean, default=False)
