@@ -7,6 +7,7 @@ from app.database import SessionLocal
 import app.models.music as models
 import app.schemas.music as schemas
 import app.crud.music as crud
+import app.crud.user as user_crud
 
 artist_router = APIRouter(
     prefix='/v1',
@@ -132,5 +133,12 @@ def delete_track(track_id: int, db: Session=Depends(get_db)):
     track.commit()
     return {}
 
-# TO-DO:
-# endpoint for adding tracks to playlist
+@track_router.patch('playlists/{playlist_id}/tracks/{track_id}', response_model=schemas.Track)
+def add_track_to_playlist(playlist_id: int, track_id: int, db: Session=Depends(get_db)):
+    playlist = user_crud.get_playlist(db=db, playlist_id=playlist_id)
+    track = crud.get_track(db=db, track_id=track_id)
+    playlist.tracks.append(track)
+    db.commit()
+    db.refresh(playlist)
+
+    return track
