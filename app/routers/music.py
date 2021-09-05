@@ -64,5 +64,39 @@ def delete_artist(artist_id: int, db: Session=Depends(get_db)):
     artist.commit()
     return {}
 
+# Albums
+
+@album_router.post('/albums', response_model=schemas.Album)
+def create_album(album: schemas.AlbumCreate, db: Session=Depends(get_db)):
+    album = crud.get_album_by_spotify_id(db=db, album_id=album.id)
+    if bool(album):
+        raise HTTPException(status_code=400, detail="album already exists")
+    return crud.create_album(db=db, album=album)
+
+@album_router.get('/albums/{album_id}', response_model=schemas.Album)
+def read_album(album_id: int, db: Session=Depends(get_db)):
+    album = crud.get_album(db=db, album_id=album_id)
+    if album is None:
+        raise HTTPException(status_code=404, detail="album not found")
+    return album
+
+@album_router.get('/albums', response_model=schema.Album)
+def read_albums(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
+    albums = crud.get_albums(db=db, skip=skip, limit=limit)
+    if not bool(albums):
+        raise HTTPException(status_code=404, detail="albums not found")
+    return albums
+
+# @album_router.put('/albums/{album_id}', response_model=schemas.Album)
+
+@album_router.delete('/albums/{album_id}', status_code=204)
+def delete_album(album_id: int, db: Session=Depends(get_db)):
+    album = crud.get_album(db=db, album_id=album_id)
+    if album is None:
+        raise HTTPException(status_code=404, detail="album not found")
+    album.delete()
+    album.commit()
+    return {}
+
 # Notes:
 # endpoint for adding tracks to playlist
