@@ -18,3 +18,54 @@ __Important:__ make sure to have the (second) .env file inside the load_db folde
 Using the "load_db.py" script you can upload the data you downloaded to the database. Make sure you have already started the Docker container!
 
 ## Project Overview
+This project consists on a basic CRUD systems for artists, albums, tracks, playlists and users. (Make sure to check the E/R database diagram on the "docs" folder!) It's based on five database tables and endpoints (artists, albums, tracks, playlists and users), on which the different REST methods are used.
+
+The project tree is as follows:
+
+.
+└── spotify-clone
+    ├── alembic # migration management
+    ├── app # main module
+    |   ├── crud
+    |   |   ├── music.py
+    |   |   └── user.py
+    |   ├── models
+    |   |   ├── music.py
+    |   |   └── user.py
+    |   ├── routers
+    |   |   ├── music.py
+    |   |   └── user.py
+    |   ├── schemas
+    |   |   ├── music.py
+    |   |   └── user.py
+    |   ├── config.py
+    |   ├── database.py
+    |   └── main.py
+    ├── docs # useful docs
+    |   └── 'spotify clone db e-r.pdf'
+    ├── load_db # down and upload spotify data
+    |   ├── files
+    |   |   ├── albums.json
+    |   |   ├── artists.json
+    |   |   ├── playlists.json
+    |   |   ├── tracks.json
+    |   |   └── user.json
+    |   ├── .env
+    |   ├── download_data.py
+    |   └── load_db.py
+    ├── .env
+    ├── .gitignore
+    ├── alembic.ini
+    ├── docker-compose.yml
+    ├── Pipfile
+    ├── Pipfile.lock
+    └── README.md
+
+As mentioned before, this project was built using Docker (bonus no. 1), and various different  functionalities have been implemented, such as:
+
+* Search of user by email or by spotify id
+* Get all of a given user playlists'
+
+Some more that I was thinking but couldn't implement (because time ran out):
+
+* Create a special playlist table on which the user's favorite songs are stored, and its corresponding endpoint
