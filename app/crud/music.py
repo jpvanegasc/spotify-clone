@@ -1,4 +1,4 @@
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 
 import app.models.music as models
 import app.schemas.music as schemas

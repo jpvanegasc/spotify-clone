@@ -1,10 +1,14 @@
 """
 Define Music-related schemas
 """
-from typing import List
+from typing import ForwardRef, List
 from datetime import datetime
 
 from pydantic import BaseModel, Json, constr
+
+artist_forward_ref = ForwardRef("List[Artist]")
+album_forward_ref = ForwardRef("List[Album]")
+track_forward_ref = ForwardRef("List[Track]")
 
 class ArtistBase(BaseModel):
     external_urls: Json
@@ -23,8 +27,8 @@ class ArtistCreate(ArtistBase):
 
 class Artist(ArtistBase):
     _id: int
-    albums: List[Album] = []
-    tracks = List[Track] = []
+    albums: album_forward_ref = []
+    tracks: track_forward_ref = []
 
     class Config:
         orm_mode = True
@@ -52,7 +56,7 @@ class AlbumCreate(AlbumBase):
 
 class Album(AlbumBase):
     _id: int
-    tracks: List[Track] = []
+    tracks: track_forward_ref = []
 
     class Config:
         orm_mode = True
@@ -80,8 +84,12 @@ class TrackCreate(TrackBase):
 
 class Track(TrackBase):
     _id: int
-    album: List[Album] = []
-    artist: List[Artist] = []
+    album: album_forward_ref = []
+    artist: artist_forward_ref = []
 
     class Config:
         orm_mode = True
+
+Artist.update_forward_refs()
+Album.update_forward_refs()
+Track.update_forward_refs()
