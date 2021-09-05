@@ -18,7 +18,7 @@ album_router = APIRouter(
     tags=["albums"]
 )
 
-tracks_router = APIRouter(
+track_router = APIRouter(
     prefix='/v1',
     tags=["tracks"]
 )
@@ -46,7 +46,7 @@ def read_artist(artist_id: int, db: Session=Depends(get_db)):
         raise HTTPException(status_code=404, detail="artist not found")
     return artist
 
-@artist_router.get('/artists', response_model=schema.Artist)
+@artist_router.get('/artists', response_model=schemas.Artist)
 def read_artists(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
     artists = crud.get_artists(db=db, skip=skip, limit=limit)
     if not bool(artists):
@@ -80,7 +80,7 @@ def read_album(album_id: int, db: Session=Depends(get_db)):
         raise HTTPException(status_code=404, detail="album not found")
     return album
 
-@album_router.get('/albums', response_model=schema.Album)
+@album_router.get('/albums', response_model=schemas.Album)
 def read_albums(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
     albums = crud.get_albums(db=db, skip=skip, limit=limit)
     if not bool(albums):
@@ -114,7 +114,7 @@ def read_track(track_id: int, db: Session=Depends(get_db)):
         raise HTTPException(status_code=404, detail="track not found")
     return track
 
-@track_router.get('/tracks', response_model=schema.Track)
+@track_router.get('/tracks', response_model=schemas.Track)
 def read_tracks(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
     tracks = crud.get_tracks(db=db, skip=skip, limit=limit)
     if not bool(tracks):
