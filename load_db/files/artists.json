@@ -1,0 +1,74 @@
+[
+    {
+        "external_urls": {
+            "spotify": "https://open.spotify.com/artist/4NMzrymQlZzpXs0LT3Arei"
+        },
+        "followers": {
+            "href": null,
+            "total": 71507
+        },
+        "genres": [
+            "flamenco fusion"
+        ],
+        "href": "https://api.spotify.com/v1/artists/4NMzrymQlZzpXs0LT3Arei",
+        "id": "4NMzrymQlZzpXs0LT3Arei",
+        "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab6761610000e5eb5ad4f526725b9b9b86dfa5d0",
+                "width": 640
+            },
+            {
+                "height": 320,
+                "url": "https://i.scdn.co/image/ab676161000051745ad4f526725b9b9b86dfa5d0",
+                "width": 320
+            },
+            {
+                "height": 160,
+                "url": "https://i.scdn.co/image/ab6761610000f1785ad4f526725b9b9b86dfa5d0",
+                "width": 160
+            }
+        ],
+        "name": "Rupatrupa",
+        "popularity": 53,
+        "type": "artist",
+        "uri": "spotify:artist:4NMzrymQlZzpXs0LT3Arei"
+    },
+    {
+        "external_urls": {
+            "spotify": "https://open.spotify.com/artist/69zVBf7wk5vKWsTF7zE5CC"
+        },
+        "followers": {
+            "href": null,
+            "total": 91550
+        },
+        "genres": [
+            "french indie pop",
+            "french indietronica",
+            "new french touch"
+        ],
+        "href": "https://api.spotify.com/v1/artists/69zVBf7wk5vKWsTF7zE5CC",
+        "id": "69zVBf7wk5vKWsTF7zE5CC",
+        "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab6761610000e5ebb9fff2b6dc6d8a9766dfa333",
+                "width": 640
+            },
+            {
+                "height": 320,
+                "url": "https://i.scdn.co/image/ab67616100005174b9fff2b6dc6d8a9766dfa333",
+                "width": 320
+            },
+            {
+                "height": 160,
+                "url": "https://i.scdn.co/image/ab6761610000f178b9fff2b6dc6d8a9766dfa333",
+                "width": 160
+            }
+        ],
+        "name": "Claire Laffut",
+        "popularity": 53,
+        "type": "artist",
+        "uri": "spotify:artist:69zVBf7wk5vKWsTF7zE5CC"
+    }
+]

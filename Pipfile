@@ -10,6 +10,7 @@ sqlalchemy = "*"
 sqlalchemy-json = "*"
 psycopg2-binary = "*"
 alembic = "*"
+requests = "*"
 
 [dev-packages]
 
