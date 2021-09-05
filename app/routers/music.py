@@ -98,5 +98,39 @@ def delete_album(album_id: int, db: Session=Depends(get_db)):
     album.commit()
     return {}
 
-# Notes:
+# Tracks
+
+@track_router.post('/tracks', response_model=schemas.Track)
+def create_track(track: schemas.TrackCreate, db: Session=Depends(get_db)):
+    track = crud.get_track_by_spotify_id(db=db, track_id=track.id)
+    if bool(track):
+        raise HTTPException(status_code=400, detail="track already exists")
+    return crud.create_track(db=db, track=track)
+
+@track_router.get('/tracks/{track_id}', response_model=schemas.Track)
+def read_track(track_id: int, db: Session=Depends(get_db)):
+    track = crud.get_track(db=db, track_id=track_id)
+    if track is None:
+        raise HTTPException(status_code=404, detail="track not found")
+    return track
+
+@track_router.get('/tracks', response_model=schema.Track)
+def read_tracks(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
+    tracks = crud.get_tracks(db=db, skip=skip, limit=limit)
+    if not bool(tracks):
+        raise HTTPException(status_code=404, detail="tracks not found")
+    return tracks
+
+# @track_router.put('/tracks/{track_id}', response_model=schemas.Track)
+
+@track_router.delete('/tracks/{track_id}', status_code=204)
+def delete_track(track_id: int, db: Session=Depends(get_db)):
+    track = crud.get_track(db=db, track_id=track_id)
+    if track is None:
+        raise HTTPException(status_code=404, detail="track not found")
+    track.delete()
+    track.commit()
+    return {}
+
+# TO-DO:
 # endpoint for adding tracks to playlist
