@@ -13,6 +13,7 @@ class PlaylistBase(BaseModel):
     href: constr(max_length=150)
     id: constr(max_length=50)
     name: constr(max_length=150)
+    owner_id: int
     public: bool
     snapshot_id: constr(max_length=150)
     type: constr(max_length=50)
@@ -23,7 +24,6 @@ class PlaylistCreate(PlaylistBase):
 
 class Playlist(PlaylistBase):
     _id: int
-    owner_id: int
     tracks: List[Track] = []
 
     class Config:
