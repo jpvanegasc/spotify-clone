@@ -7,22 +7,23 @@ import requests
 PATH_TO_FILES = "./files"
 LOCAL_URL = "http://localhost:8000/v1"
 
-def json_fields_to_str(json_object):
-    """
-    Convert json-like fields to str, in order to pass the objects to the api endpoints
-    """
-    for key in json_object.keys():
-        if isinstance(json_object[key], (list, dict)):
-            json_object[key] = json.dumps(json_object[key])
-
-    return json_object
-
 # Users
 
 with open(f"{PATH_TO_FILES}/user.json") as f:
-    user = json.loads(f.read())
+    user_original = json.loads(f.read())
 
-r = requests.post(f"{LOCAL_URL}/users", json=json_fields_to_str(user))
+user = {
+    "country": user_original['country'],
+    "display_name": user_original['display_name'],
+    "email": user_original['email'],
+    "href": user_original['href'],
+    "id": user_original['id'],
+    "product": user_original['product'],
+    "type": user_original['type'],
+    "uri": user_original['uri'],
+}
+
+r = requests.post(f"{LOCAL_URL}/users", json=user)
 
 if r.ok:
     print("user loaded")
@@ -34,11 +35,21 @@ else:
 with open(f"{PATH_TO_FILES}/playlists.json") as f:
     playlists = json.loads(f.read())
 
-for playlist in playlists:
-    playlist.pop('owner', None)
-    playlist.pop('tracks', None)
+for playlist_original in playlists:
+    playlist = {
+        "collaborative": playlist_original['collaborative'],
+        "description": playlist_original['description'],
+        "href": playlist_original['href'],
+        "id": playlist_original['id'],
+        "name": playlist_original['name'],
+        "owner_id":0,
+        "public": playlist_original['public'],
+        "snapshot_id": playlist_original['snapshot_id'],
+        "type": playlist_original['type'],
+        "uri": playlist_original['uri'],
+    }
 
-    r = requests.post(f"{LOCAL_URL}/playlists?user_id=0", json=json_fields_to_str(playlist))
+    r = requests.post(f"{LOCAL_URL}/playlists", json=playlist)
 
     if r.ok:
         print(f"{playlist['name']} loaded")
@@ -50,8 +61,16 @@ for playlist in playlists:
 with open(f"{PATH_TO_FILES}/artists.json") as f:
     artists = json.loads(f.read())
 
-for artist in artists:
-    r = requests.post(f"{LOCAL_URL}/artists", json=json_fields_to_str(artist))
+for artist_original in artists:
+    artist = {
+        "href": artist_original['href'],
+        "id": artist_original['id'],
+        "name": artist_original['name'],
+        "popularity": artist_original['popularity'],
+        "type": artist_original['type'],
+        "uri": artist_original['uri'],
+    }
+    r = requests.post(f"{LOCAL_URL}/artists", json=artist)
 
     if r.ok:
         print(f"{artist['name']} loaded")
@@ -60,47 +79,71 @@ for artist in artists:
 
 # Albums
 
-with open(f"{PATH_TO_FILES}/albums.json") as f:
-    albums = json.loads(f.read())
+# with open(f"{PATH_TO_FILES}/albums.json") as f:
+#     albums = json.loads(f.read())
 
-album_info = dict()
+# album_info = dict()
 
-for i, album in enumerate(albums):
-    if album['artists'][0]['name'] == "Rupatrupa":
-        artist = 0
-    else:
-        artist = 1
+# for i, album_original in enumerate(albums):
+#     if album_original['artists'][0]['name'] == "Rupatrupa":
+#         artist = 0
+#     else:
+#         artist = 1
 
-    album.pop('artists', None)
-    album.pop('tracks', None)
-    album['artists_id'] = [artist]
-    album["release_date"] += "T00:00:00.000"
+#     album = {
+#         "album_type": album_original['album_type'],
+#         "href": album_original['href'],
+#         "id": album_original['id'],
+#         "label": album_original['label'],
+#         "name": album_original['name'],
+#         "popularity": album_original['popularity'],
+#         "total_tracks": album_original['total_tracks'],
+#         "type": album_original['type'],
+#         "uri": album_original['uri'],
+#     }
 
-    album_info[album['name']] = {'album_id':i, 'artist_id':artist}
 
-    r = requests.post(f"{LOCAL_URL}/albums", json=json_fields_to_str(album))
+#     album['artists_id'] = [artist]
 
-    if r.ok:
-        print(f"{album['name']} loaded")
-    else:
-        print(f"{album['name']} failed. Endpoint response: {r.status_code} {r.text}")
+#     album_info[album['name']] = {'album_id':i, 'artist_id':artist}
+
+#     r = requests.post(f"{LOCAL_URL}/albums", json=album)
+
+#     if r.ok:
+#         print(f"{album['name']} loaded")
+#     else:
+#         print(f"{album['name']} failed. Endpoint response: {r.status_code} {r.text}")
 
 # Tracks
 
-with open(f"{PATH_TO_FILES}/tracks.json") as f:
-    tracks = json.loads(f.read())
+# with open(f"{PATH_TO_FILES}/tracks.json") as f:
+#     tracks = json.loads(f.read())
 
-for track in tracks:
-    album_name = track['album']['name']
+# for track_original in tracks:
+#     album_name = track_original['album']['name']
 
-    track.pop('artists', None)
-    track.pop('albums', None)
-    track['album_id'] = [album_info[album_name]['album_id']]
-    track['artist_id'] = [album_info[album_name]['artist_id']]
+#     track = {
+#         "disc_number": track_original['disc_number'],
+#         "duration_ms": track_original['duration_ms'],
+#         "explicit": track_original['explicit'],
+#         "href": track_original['href'],
+#         "id": track_original['id'],
+#         "is_local": track_original['is_local'],
+#         "is_playable": track_original['is_playable'],
+#         "name": track_original['name'],
+#         "popularity": track_original['popularity'],
+#         "preview_url": track_original['preview_url'],
+#         "track_number": track_original['track_number'],
+#         "type": track_original['type'],
+#         "uri": track_original['uri'],
+#     }
 
-    r = requests.post(f"{LOCAL_URL}/tracks", json=json_fields_to_str(track))
+#     track['album_id'] = [album_info[album_name]['album_id']]
+#     track['artist_id'] = [album_info[album_name]['artist_id']]
 
-    if r.ok:
-        print(f"{track['name']} loaded")
-    else:
-        print(f"{track['name']} failed. Endpoint response: {r.status_code} {r.text}")
+#     r = requests.post(f"{LOCAL_URL}/tracks", json=track)
+
+#     if r.ok:
+#         print(f"{track['name']} loaded")
+#     else:
+#         print(f"{track['name']} failed. Endpoint response: {r.status_code} {r.text}")
