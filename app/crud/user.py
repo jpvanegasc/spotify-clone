@@ -36,8 +36,8 @@ def get_playlists_by_user(db: Session, user_id: int, limit: int=0):
 def get_playlists(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Playlist).offset(skip).limit(limit).all()
 
-def create_playlist(db: Session, playlist: schemas.PlaylistCreate, user_id: int):
-    db_playlist = models.User(**playlist.dict(), owner_id=user_id)
+def create_playlist(db: Session, playlist: schemas.PlaylistCreate):
+    db_playlist = models.User(**playlist.dict())
     db.add(db_playlist)
     db.commit()
     db.refresh(db_playlist)
