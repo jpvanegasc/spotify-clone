@@ -83,7 +83,7 @@ def delete_user(user_id: int, db: Session=Depends(get_db)):
 
 @playlist_router.post('/playlists', response_model=schemas.Playlist)
 def create_playlist(playlist:schemas.PlaylistCreate, user_id: int, db: Session=Depends(get_db)):
-    db_playlist = crud.get_playlist_by_spotify_id(db, playlist_id=playlist.id)
+    db_playlist = crud.get_playlist_by_spotify_id(db, user_id=playlist.id)
     if bool(db_playlist):
         raise HTTPException(status_code=400, detail="playlist already exists")
     return crud.create_playlist(db=db, playlist=playlist)

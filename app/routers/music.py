@@ -135,15 +135,15 @@ def read_tracks(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Dep
         raise HTTPException(status_code=404, detail="tracks not found")
     return tracks
 
-@album_router.put('/albums/{album_id}', response_model=schemas.AlbumCreate)
-def update_album(album_id: int, album: schemas.AlbumCreate, db: Session=Depends(get_db)):
-    db_album = crud.get_album(db=db, album_id=album_id)
-    if album is None:
-        raise HTTPException(status_code=404, detail="album not found")
-    db_album.update(album.dict())
+@track_router.put('/tracks/{track_id}', response_model=schemas.TrackCreate)
+def update_track(track_id: int, track: schemas.TrackCreate, db: Session=Depends(get_db)):
+    db_track = crud.get_track(db=db, track_id=track_id)
+    if track is None:
+        raise HTTPException(status_code=404, detail="track not found")
+    db_track.update(track.dict())
     db.commit()
-    db.refresh(db_album)
-    return db_album
+    db.refresh(db_track)
+    return db_track
 
 @track_router.delete('/tracks/{track_id}', status_code=204)
 def delete_track(track_id: int, db: Session=Depends(get_db)):
