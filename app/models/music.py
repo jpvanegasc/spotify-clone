@@ -27,7 +27,7 @@ class Artist(Base):
     uri = Column(String(length=150))
 
     albums = relationship("Album", secondary="artist_albums")
-    tracks = relationship("Album", secondary="artist_tracks")
+    tracks = relationship("Track", secondary="artist_tracks")
 
 
 class Album(Base):
@@ -84,7 +84,7 @@ class Track(Base):
     type = Column(String(length=50))
     uri = Column(String(length=150))
 
-    album = relationship("Album", back_populates="album")
+    album = relationship("Album", back_populates="tracks")
     artist = relationship("Artist", secondary="artist_tracks")
     playlists = relationship("Playlist", secondary="playlist_tracks")
 

@@ -1,7 +1,7 @@
 """
 Define User-related schemas
 """
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Json, constr
 
@@ -16,7 +16,7 @@ class PlaylistBase(BaseModel):
     id: constr(max_length=50)
     images: Json
     name: constr(max_length=150)
-    primary_color: constr(max_length=6)
+    primary_color: Optional[constr(max_length=6)]=None
     public: bool
     snapshot_id: constr(max_length=150)
     type: constr(max_length=50)

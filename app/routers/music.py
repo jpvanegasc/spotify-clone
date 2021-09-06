@@ -26,10 +26,7 @@ track_router = APIRouter(
 
 def get_db():
     db = SessionLocal()
-    try:
-        yield db
-    except:
-        db.close()
+    yield db
 
 # Artists
 

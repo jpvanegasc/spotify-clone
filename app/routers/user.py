@@ -21,17 +21,14 @@ playlist_router = APIRouter(
 
 def get_db():
     db = SessionLocal()
-    try:
-        yield db
-    except:
-        db.close()
+    yield db
 
 
 # Users
 
 @user_router.post('/users', response_model=schemas.User)
 def create_user(user:schemas.UserCreate, db: Session=Depends(get_db)):
-    db_user = crud.get_user_by_email(db=db, email=user.email)
+    db_user = crud.get_user_by_email(db=db, user_email=user.email)
     if bool(db_user):
         raise HTTPException(status_code=400, detail="email already registered")
     return crud.create_user(db=db, user=user)

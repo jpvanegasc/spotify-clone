@@ -55,9 +55,10 @@ class Playlist(Base):
     uri = Column(String(length=150))
 
     tracks = relationship("Track", secondary="playlist_tracks")
+    owner = relationship("User", back_populates="playlists")
 
 
-class PlaylistTracksAssociation(Base):
+class PlaylistTracks(Base):
     """
     Playlist & Tracks association table
 

@@ -13,7 +13,7 @@ def json_fields_to_str(json_object):
     """
     for key in json_object.keys():
         if isinstance(json_object[key], (list, dict)):
-            json_object[key] = str(json_object[key])
+            json_object[key] = json.dumps(json_object[key])
 
     return json_object
 
@@ -22,12 +22,12 @@ def json_fields_to_str(json_object):
 with open(f"{PATH_TO_FILES}/user.json") as f:
     user = json.loads(f.read())
 
-r = requests.post(f"{LOCAL_URL}/users", data=json_fields_to_str(user))
+r = requests.post(f"{LOCAL_URL}/users", json=json_fields_to_str(user))
 
 if r.ok:
     print("user loaded")
 else:
-    print(f"user failed. Endpoint response: {r.json()}")
+    print(f"user failed. Endpoint response: {r.status_code} {r.text}")
 
 # Playlists
 
@@ -38,12 +38,12 @@ for playlist in playlists:
     playlist.pop('owner', None)
     playlist.pop('tracks', None)
 
-    r = requests.post(f"{LOCAL_URL}/playlists?user_id=0", data=json_fields_to_str(playlist))
+    r = requests.post(f"{LOCAL_URL}/playlists?user_id=0", json=json_fields_to_str(playlist))
 
     if r.ok:
         print(f"{playlist['name']} loaded")
     else:
-        print(f"{playlist['name']} failed. Endpoint response: {r.json()}")
+        print(f"{playlist['name']} failed. Endpoint response: {r.status_code} {r.text}")
 
 # Artists
 
@@ -51,12 +51,12 @@ with open(f"{PATH_TO_FILES}/artists.json") as f:
     artists = json.loads(f.read())
 
 for artist in artists:
-    r = requests.post(f"{LOCAL_URL}/artists", data=json_fields_to_str(artist))
+    r = requests.post(f"{LOCAL_URL}/artists", json=json_fields_to_str(artist))
 
     if r.ok:
         print(f"{artist['name']} loaded")
     else:
-        print(f"{artist['name']} failed. Endpoint response: {r.json()}")
+        print(f"{artist['name']} failed. Endpoint response: {r.status_code} {r.text}")
 
 # Albums
 
@@ -74,15 +74,16 @@ for i, album in enumerate(albums):
     album.pop('artists', None)
     album.pop('tracks', None)
     album['artists_id'] = [artist]
+    album["release_date"] += "T00:00:00.000"
 
     album_info[album['name']] = {'album_id':i, 'artist_id':artist}
 
-    r = requests.post(f"{LOCAL_URL}/albums", data=json_fields_to_str(album))
+    r = requests.post(f"{LOCAL_URL}/albums", json=json_fields_to_str(album))
 
     if r.ok:
         print(f"{album['name']} loaded")
     else:
-        print(f"{album['name']} failed. Endpoint response: {r.json()}")
+        print(f"{album['name']} failed. Endpoint response: {r.status_code} {r.text}")
 
 # Tracks
 
@@ -97,9 +98,9 @@ for track in tracks:
     track['album_id'] = [album_info[album_name]['album_id']]
     track['artist_id'] = [album_info[album_name]['artist_id']]
 
-    r = requests.post(f"{LOCAL_URL}/tracks", data=json_fields_to_str(track))
+    r = requests.post(f"{LOCAL_URL}/tracks", json=json_fields_to_str(track))
 
     if r.ok:
         print(f"{track['name']} loaded")
     else:
-        print(f"{track['name']} failed. Endpoint response: {r.json()}")
+        print(f"{track['name']} failed. Endpoint response: {r.status_code} {r.text}")
