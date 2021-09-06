@@ -1,7 +1,7 @@
 """
 Specify music-related models
 """
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean,DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Date
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.postgresql import JSONB
 
@@ -15,12 +15,8 @@ class Artist(Base):
     __tablename__ = "artists"
 
     _id = Column(Integer, primary_key=True, index=True)
-    external_urls = Column(JSONB)
-    followers = Column(JSONB)
-    genres = Column(JSONB)
     href = Column(String(length=150))
     id = Column(String(length=50), unique=True, index=True)
-    images = Column(JSONB)
     name = Column(String(length=150), unique=True, index=True)
     popularity = Column(Integer)
     type = Column(String(length=50))
@@ -39,18 +35,11 @@ class Album(Base):
 
     _id = Column(Integer, primary_key=True, index=True)
     album_type = Column(String(length=50))
-    copyrights = Column(JSONB)
-    external_ids = Column(JSONB)
-    external_urls = Column(JSONB)
-    genres = Column(JSONB)
     href = Column(String(length=150))
     id = Column(String(length=50), unique=True, index=True)
-    images = Column(JSONB)
     label = Column(String(length=150))
     name = Column(String(length=150))
     popularity = Column(Integer)
-    release_date = Column(DateTime)
-    release_date_precision = Column(String(length=50))
     total_tracks = Column(Integer)
     type = Column(String(length=50))
     uri = Column(String(length=150))
@@ -71,8 +60,6 @@ class Track(Base):
     disc_number = Column(Integer)
     duration_ms = Column(Integer)
     explicit = Column(Boolean, default=False)
-    external_ids = Column(JSONB)
-    external_urls = Column(JSONB)
     href = Column(String(length=150))
     id = Column(String(length=50), unique=True, index=True)
     is_local = Column(Boolean, default=False)

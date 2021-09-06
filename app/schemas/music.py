@@ -11,13 +11,9 @@ album_forward_ref = ForwardRef("List[Album]")
 track_forward_ref = ForwardRef("List[Track]")
 
 class ArtistBase(BaseModel):
-    external_urls: Json
-    followers: Json
-    genres: Json
     href: constr(max_length=150)
-    id = constr(max_length=50)
-    images: Json
-    name = constr(max_length=150)
+    id: constr(max_length=50)
+    name: constr(max_length=150)
     popularity: int
     type: constr(max_length=50)
     uri: constr(max_length=150)
@@ -35,18 +31,11 @@ class Artist(ArtistBase):
 
 class AlbumBase(BaseModel):
     album_type: constr(max_length=150)
-    copyrights: Json
-    external_ids: Json
-    external_urls: Json
-    genres: Json
     href: constr(max_length=150)
     id: constr(max_length=50)
-    images: Json
     label: constr(max_length=150)
     name: constr(max_length=150)
     popularity: int
-    release_date: datetime
-    release_date_precision: constr(max_length=50)
     total_tracks: int
     type: constr(max_length=50)
     uri: constr(max_length=150)
@@ -65,8 +54,6 @@ class TrackBase(BaseModel):
     disc_number: int
     duration_ms: int
     explicit: bool
-    external_ids: Json
-    external_urls: Json
     href: constr(max_length=150)
     id: constr(max_length=50)
     is_local: bool
