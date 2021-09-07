@@ -15,12 +15,12 @@ def get_artists(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Artist).offset(skip).limit(limit).all()
 
 def create_artist(db: Session, artist: schemas.ArtistCreate):
-    artist = models.Artist(**artist.dict())
-    db.add(artist)
+    db_artist = models.Artist(**artist.dict())
+    db.add(db_artist)
     db.commit()
-    db.refresh(artist)
+    db.refresh(db_artist)
 
-    return artist
+    return db_artist
 
 def update_artist(db: Session, artist: schemas.ArtistCreate, db_artist: models.Artist):
     for key in artist.dict().keys():
@@ -45,12 +45,15 @@ def get_albums(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Album).offset(skip).limit(limit).all()
 
 def create_album(db: Session, album: schemas.AlbumCreate):
-    album = models.User(**album.dict())
-    db.add(album)
-    db.commit()
-    db.refresh(album)
+    album_dict = album.dict()
+    album_dict.pop('artists_id')
 
-    return album
+    db_album = models.Album(**album_dict)
+    db.add(db_album)
+    db.commit()
+    db.refresh(db_album)
+
+    return db_album
 
 def update_album(db: Session, album: schemas.AlbumCreate, db_album: models.Album):
     for key in album.dict().keys():
@@ -74,13 +77,16 @@ def get_track(db: Session, track_id: int):
 def get_tracks(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Track).offset(skip).limit(limit).all()
 
-def create_track(db: Session, track: schemas.TrackCreate, user_id: int):
-    track = models.User(**track.dict(), owner_id=user_id)
-    db.add(track)
-    db.commit()
-    db.refresh(track)
+def create_track(db: Session, track: schemas.TrackCreate):
+    track_dict = track.dict()
+    track_dict.pop('artists_id')
 
-    return track
+    db_track = models.Track(**track_dict)
+    db.add(db_track)
+    db.commit()
+    db.refresh(db_track)
+
+    return db_track
 
 def update_track(db: Session, track: schemas.TrackCreate, db_track: models.Track):
     for key in track.dict().keys():

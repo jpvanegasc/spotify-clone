@@ -8,6 +8,7 @@ from app.database import SessionLocal
 import app.models.user as models
 import app.schemas.user as schemas
 import app.crud.user as crud
+import app.crud.music as music_crud
 
 
 user_router = APIRouter(
@@ -41,7 +42,10 @@ def read_user(user_id: int, db: Session=Depends(get_db)):
     return db_user
 
 @user_router.get('/users')
-def read_users(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
+def read_users(skip: Optional[int]=0, limit: Optional[int]=10, db: Session=Depends(get_db)):
+    if limit > 100:
+        raise HTTPException(status_code=400, detail="limit exceeds permited value")
+
     db_users = crud.get_users(db, skip=skip, limit=limit)
     if not bool(db_users):
         raise HTTPException(status_code=404, detail="users not found")
@@ -65,7 +69,10 @@ def delete_user(user_id: int, db: Session=Depends(get_db)):
 # Playlists
 
 @playlist_router.post('/playlists')
-def create_playlist(playlist:schemas.PlaylistCreate, user_id: int, db: Session=Depends(get_db)):
+def create_playlist(playlist:schemas.PlaylistCreate, db: Session=Depends(get_db)):
+    db_owner = crud.get_user(db=db, user_id=playlist.owner_id)
+    if db_owner is None:
+        raise HTTPException(status_code=400, detail="playlist owner not found")
     return crud.create_playlist(db=db, playlist=playlist)
 
 @playlist_router.get('/playlists/{playlist_id}')
@@ -89,3 +96,19 @@ def delete_playlist(playlist_id: int, db: Session=Depends(get_db)):
         raise HTTPException(status_code=404, detail="playlist not found")
     crud.delete_playlist(db=db, db_playlist=db_playlist)
     return Response(status_code=204)
+
+@playlist_router.patch('/playlists/{playlist_id}/tracks/{track_id}')
+def add_track_to_playlist(playlist_id: int, track_id: int, db: Session=Depends(get_db)):
+    playlist = crud.get_playlist(db=db, playlist_id=playlist_id)
+    track = music_crud.get_track(db=db, track_id=track_id)
+
+    if playlist is None:
+        raise HTTPException(status_code=404, detail="playlist not found")
+    if track is None:
+        raise HTTPException(status_code=404, detail="track not found")
+
+    playlist.tracks.append(track)
+    db.commit()
+    db.refresh(playlist)
+
+    return playlist

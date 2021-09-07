@@ -43,6 +43,7 @@ class AlbumCreate(AlbumBase):
 
 class Album(AlbumBase):
     id: int
+    artist = artist_forward_ref = []
     tracks: track_forward_ref = []
 
     class Config:
@@ -63,8 +64,8 @@ class TrackBase(BaseModel):
     uri: constr(max_length=150)
 
 class TrackCreate(TrackBase):
-    album_id: conlist(int, min_items=1)
-    artist_id: conlist(int, min_items=1)
+    album_id: int
+    artists_id: conlist(int, min_items=1)
 
 class Track(TrackBase):
     id: int

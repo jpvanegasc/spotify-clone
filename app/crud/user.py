@@ -16,12 +16,12 @@ def get_users(db: Session, skip: int=0, limit: int=100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    user = models.User(**user.dict())
-    db.add(user)
+    db_user = models.User(**user.dict())
+    db.add(db_user)
     db.commit()
-    db.refresh(user)
+    db.refresh(db_user)
 
-    return user
+    return db_user
 
 def update_user(db: Session, user: schemas.UserCreate, db_user: models.User):
     for key in user.dict().keys():
@@ -45,13 +45,13 @@ def get_playlist(db: Session, playlist_id: int):
 def get_playlists(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Playlist).offset(skip).limit(limit).all()
 
-def create_playlist(db: Session, playlist: schemas.PlaylistCreate, user_id: int):
-    playlist = models.User(**playlist.dict(), owner_id=user_id)
-    db.add(playlist)
+def create_playlist(db: Session, playlist: schemas.PlaylistCreate):
+    db_playlist = models.Playlist(**playlist.dict())
+    db.add(db_playlist)
     db.commit()
-    db.refresh(playlist)
+    db.refresh(db_playlist)
 
-    return playlist
+    return db_playlist
 
 def update_playlist(db: Session, playlist: schemas.PlaylistCreate, db_playlist: models.Playlist):
     for key in playlist.dict().keys():
