@@ -98,11 +98,10 @@ The project tree is as follows:
     └── README.md
 
 
-As mentioned before, this project was built using Docker (bonus no. 1), and various different  functionalities have been implemented, such as:
+As mentioned before, this project was built using Docker (bonus no. 1).
 
-* Search of user by email or by spotify id
+Some new functionalities that I was thinking but couldn't implement (because time ran out):
+
+* Search of user by email
 * Get all of a given user playlists'
-
-Some more that I was thinking but couldn't implement (because time ran out):
-
 * Create a special playlist table on which the user's favorite songs are stored, and its corresponding endpoint
