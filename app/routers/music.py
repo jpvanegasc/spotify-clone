@@ -11,152 +11,119 @@ import app.crud.user as user_crud
 
 artist_router = APIRouter(
     prefix='/v1',
-    tags=["artists"]
+    tags=["Artists"]
 )
 
 album_router = APIRouter(
     prefix='/v1',
-    tags=["albums"]
+    tags=["Albums"]
 )
 
 track_router = APIRouter(
     prefix='/v1',
-    tags=["tracks"]
+    tags=["Tracks"]
 )
 
 def get_db():
-    db = SessionLocal()
-    yield db
+    yield SessionLocal()
 
 # Artists
 
 @artist_router.post('/artists')
-def create_artist(artist: schemas.ArtistCreate, db: Session=Depends(get_db)):
-    artist = crud.get_artist_by_name(db=db, artist_name=artist.name)
-    if bool(artist):
-        raise HTTPException(status_code=400, detail="artist already exists")
+def create_artist(artist:schemas.ArtistCreate, db: Session=Depends(get_db)):
+    db_artist = crud.get_artist_by_name(db=db, artist_email=artist.email)
+    if bool(db_artist):
+        raise HTTPException(status_code=400, detail="email already registered")
     return crud.create_artist(db=db, artist=artist)
 
 @artist_router.get('/artists/{artist_id}')
 def read_artist(artist_id: int, db: Session=Depends(get_db)):
-    artist = crud.get_artist(db=db, artist_id=artist_id)
-    if artist is None:
+    db_artist = crud.get_artist(db=db, artist_id=artist_id)
+    if db_artist is None:
         raise HTTPException(status_code=404, detail="artist not found")
-    return artist
+    return db_artist
 
 @artist_router.get('/artists')
 def read_artists(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
-    artists = crud.get_artists(db=db, skip=skip, limit=limit)
-    if not bool(artists):
+    db_artists = crud.get_artists(db, skip=skip, limit=limit)
+    if not bool(db_artists):
         raise HTTPException(status_code=404, detail="artists not found")
-    return artists
+    return db_artists
 
 @artist_router.put('/artists/{artist_id}')
 def update_artist(artist_id: int, artist: schemas.ArtistCreate, db: Session=Depends(get_db)):
     db_artist = crud.get_artist(db=db, artist_id=artist_id)
     if artist is None:
         raise HTTPException(status_code=404, detail="artist not found")
-    db_artist.update(artist.dict())
-    db.commit()
-    db.refresh(db_artist)
-    return db_artist
+    return crud.update_artist(db=db, artist=artist, db_artist=db_artist)
 
-@artist_router.delete('/artists/{artist_id}', status_code=204)
+@artist_router.delete('/artists/{artist_id}')
 def delete_artist(artist_id: int, db: Session=Depends(get_db)):
-    artist = crud.get_artist(db=db, artist_id=artist_id)
-    if artist is None:
+    db_artist = crud.get_artist(db=db, artist_id=artist_id)
+    if db_artist is None:
         raise HTTPException(status_code=404, detail="artist not found")
-    artist.delete()
-    artist.commit()
-    return {}
+    crud.delete_artist(db=db, db_artist=db_artist)
+    return Response(status_code=204)
 
 # Albums
 
 @album_router.post('/albums')
-def create_album(album: schemas.AlbumCreate, db: Session=Depends(get_db)):
-    album = crud.get_album_by_spotify_id(db=db, album_id=album.id)
-    if bool(album):
-        raise HTTPException(status_code=400, detail="album already exists")
+def create_album(album:schemas.AlbumCreate, user_id: int, db: Session=Depends(get_db)):
     return crud.create_album(db=db, album=album)
 
 @album_router.get('/albums/{album_id}')
 def read_album(album_id: int, db: Session=Depends(get_db)):
-    album = crud.get_album(db=db, album_id=album_id)
-    if album is None:
+    db_album = crud.get_album(db=db, album_id=album_id)
+    if db_album is None:
         raise HTTPException(status_code=404, detail="album not found")
-    return album
-
-@album_router.get('/albums')
-def read_albums(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
-    albums = crud.get_albums(db=db, skip=skip, limit=limit)
-    if not bool(albums):
-        raise HTTPException(status_code=404, detail="albums not found")
-    return albums
+    return db_album
 
 @album_router.put('/albums/{album_id}')
 def update_album(album_id: int, album: schemas.AlbumCreate, db: Session=Depends(get_db)):
     db_album = crud.get_album(db=db, album_id=album_id)
     if album is None:
         raise HTTPException(status_code=404, detail="album not found")
-    db_album.update(album.dict())
-    db.commit()
-    db.refresh(db_album)
-    return db_album
+    return crud.update_album(db=db, album=album, db_album=db_album)
 
-@album_router.delete('/albums/{album_id}', status_code=204)
+@album_router.delete('/albums/{album_id}')
 def delete_album(album_id: int, db: Session=Depends(get_db)):
-    album = crud.get_album(db=db, album_id=album_id)
-    if album is None:
+    db_album = crud.get_album(db=db, album_id=album_id)
+    if db_album is None:
         raise HTTPException(status_code=404, detail="album not found")
-    album.delete()
-    album.commit()
-    return {}
+    crud.delete_album(db=db, db_album=db_album)
+    return Response(status_code=204)
 
 # Tracks
 
 @track_router.post('/tracks')
-def create_track(track: schemas.TrackCreate, db: Session=Depends(get_db)):
-    track = crud.get_track_by_spotify_id(db=db, track_id=track.id)
-    if bool(track):
-        raise HTTPException(status_code=400, detail="track already exists")
+def create_track(track:schemas.TrackCreate, user_id: int, db: Session=Depends(get_db)):
     return crud.create_track(db=db, track=track)
 
 @track_router.get('/tracks/{track_id}')
 def read_track(track_id: int, db: Session=Depends(get_db)):
-    track = crud.get_track(db=db, track_id=track_id)
-    if track is None:
+    db_track = crud.get_track(db=db, track_id=track_id)
+    if db_track is None:
         raise HTTPException(status_code=404, detail="track not found")
-    return track
-
-@track_router.get('/tracks')
-def read_tracks(skip: Optional[int]=0, limit: Optional[int]=100, db: Session=Depends(get_db)):
-    tracks = crud.get_tracks(db=db, skip=skip, limit=limit)
-    if not bool(tracks):
-        raise HTTPException(status_code=404, detail="tracks not found")
-    return tracks
+    return db_track
 
 @track_router.put('/tracks/{track_id}')
 def update_track(track_id: int, track: schemas.TrackCreate, db: Session=Depends(get_db)):
     db_track = crud.get_track(db=db, track_id=track_id)
     if track is None:
         raise HTTPException(status_code=404, detail="track not found")
-    db_track.update(track.dict())
-    db.commit()
-    db.refresh(db_track)
-    return db_track
+    return crud.update_track(db=db, track=track, db_track=db_track)
 
-@track_router.delete('/tracks/{track_id}', status_code=204)
+@track_router.delete('/tracks/{track_id}')
 def delete_track(track_id: int, db: Session=Depends(get_db)):
-    track = crud.get_track(db=db, track_id=track_id)
-    if track is None:
+    db_track = crud.get_track(db=db, track_id=track_id)
+    if db_track is None:
         raise HTTPException(status_code=404, detail="track not found")
-    track.delete()
-    track.commit()
-    return {}
+    crud.delete_track(db=db, db_track=db_track)
+    return Response(status_code=204)
 
 @track_router.patch('playlists/{playlist_id}/tracks/{track_id}')
 def add_track_to_playlist(playlist_id: int, track_id: int, db: Session=Depends(get_db)):
-    playlist = user_crud.get_playlist(db=db, playlist_id=playlist_id)
+    playlist = user_crud.crud.get_playlist(db=db, playlist_id=playlist_id)
     track = crud.get_track(db=db, track_id=track_id)
 
     if playlist is None:
