@@ -7,7 +7,7 @@ import app.schemas.user as schemas
 # Users
 
 def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User._id == user_id).first()
+    return db.query(models.User).filter(models.User.id == user_id).first()
 
 def get_user_by_email(db: Session, user_email: str):
     return db.query(models.User).filter(models.User.email == user_email).first()
@@ -40,7 +40,7 @@ def delete_user(db: Session, db_user: models.User):
 # Playlists
 
 def get_playlist(db: Session, playlist_id: int):
-    return db.query(models.Playlist).filter(models.Playlist._id == playlist_id).first()
+    return db.query(models.Playlist).filter(models.Playlist.id == playlist_id).first()
 
 def get_playlists(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Playlist).offset(skip).limit(limit).all()

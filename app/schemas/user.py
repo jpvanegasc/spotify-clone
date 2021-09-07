@@ -11,7 +11,6 @@ class PlaylistBase(BaseModel):
     collaborative: bool
     description: constr(max_length=150)
     href: constr(max_length=150)
-    id: constr(max_length=50)
     name: constr(max_length=150)
     owner_id: int
     public: bool
@@ -23,7 +22,7 @@ class PlaylistCreate(PlaylistBase):
     pass
 
 class Playlist(PlaylistBase):
-    _id: int
+    id: int
     tracks: List[Track] = []
 
     class Config:
@@ -35,7 +34,6 @@ class UserBase(BaseModel):
     display_name: constr(max_length=50)
     email: constr(max_length=150)
     href: constr(max_length=150)
-    id: constr(max_length=50)
     product: constr(max_length=50)
     type: constr(max_length=50)
     uri: constr(max_length=150)
@@ -44,8 +42,8 @@ class UserCreate(UserBase):
     pass
 
 class User(UserBase):
-    _id: int
-    playlists: List[Playlist]
+    id: int
+    playlists: List[Playlist] = []
 
     class Config:
         orm_mode = True

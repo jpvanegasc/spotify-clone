@@ -4,7 +4,7 @@ Define Music-related schemas
 from typing import ForwardRef, List
 from datetime import datetime
 
-from pydantic import BaseModel, Json, constr
+from pydantic import BaseModel, Json, constr, conlist
 
 artist_forward_ref = ForwardRef("List[Artist]")
 album_forward_ref = ForwardRef("List[Album]")
@@ -12,7 +12,6 @@ track_forward_ref = ForwardRef("List[Track]")
 
 class ArtistBase(BaseModel):
     href: constr(max_length=150)
-    id: constr(max_length=50)
     name: constr(max_length=150)
     popularity: int
     type: constr(max_length=50)
@@ -22,7 +21,7 @@ class ArtistCreate(ArtistBase):
     pass
 
 class Artist(ArtistBase):
-    _id: int
+    id: int
     albums: album_forward_ref = []
     tracks: track_forward_ref = []
 
@@ -32,7 +31,6 @@ class Artist(ArtistBase):
 class AlbumBase(BaseModel):
     album_type: constr(max_length=150)
     href: constr(max_length=150)
-    id: constr(max_length=50)
     label: constr(max_length=150)
     name: constr(max_length=150)
     popularity: int
@@ -41,10 +39,10 @@ class AlbumBase(BaseModel):
     uri: constr(max_length=150)
 
 class AlbumCreate(AlbumBase):
-    artists_id: List[int] = []
+    artists_id: conlist(int, min_items=1)
 
 class Album(AlbumBase):
-    _id: int
+    id: int
     tracks: track_forward_ref = []
 
     class Config:
@@ -55,7 +53,6 @@ class TrackBase(BaseModel):
     duration_ms: int
     explicit: bool
     href: constr(max_length=150)
-    id: constr(max_length=50)
     is_local: bool
     is_playable: bool
     name: constr(max_length=150)
@@ -66,11 +63,11 @@ class TrackBase(BaseModel):
     uri: constr(max_length=150)
 
 class TrackCreate(TrackBase):
-    album_id: List[int] = []
-    artist_id: List[int] = []
+    album_id: conlist(int, min_items=1)
+    artist_id: conlist(int, min_items=1)
 
 class Track(TrackBase):
-    _id: int
+    id: int
     album: album_forward_ref = []
     artist: artist_forward_ref = []
 

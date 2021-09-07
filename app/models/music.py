@@ -9,14 +9,11 @@ from app.database import Base
 
 class Artist(Base):
     """
-    _id: local DB id
-    id: spotify id
     """
     __tablename__ = "artists"
 
-    _id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     href = Column(String(length=150))
-    id = Column(String(length=50), unique=True, index=True)
     name = Column(String(length=150), unique=True, index=True)
     popularity = Column(Integer)
     type = Column(String(length=50))
@@ -28,15 +25,12 @@ class Artist(Base):
 
 class Album(Base):
     """
-    _id: local DB id
-    id: spotify id
     """
     __tablename__ = "albums"
 
-    _id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     album_type = Column(String(length=50))
     href = Column(String(length=150))
-    id = Column(String(length=50), unique=True, index=True)
     label = Column(String(length=150))
     name = Column(String(length=150))
     popularity = Column(Integer)
@@ -50,18 +44,15 @@ class Album(Base):
 
 class Track(Base):
     """
-    _id: local DB id
-    id: spotify id
     """
     __tablename__ = "tracks"
 
-    _id = Column(Integer, primary_key=True, index=True)
-    album_id = Column(Integer, ForeignKey("albums._id"))
+    id = Column(Integer, primary_key=True, index=True)
+    album_id = Column(Integer, ForeignKey("albums.id"))
     disc_number = Column(Integer)
     duration_ms = Column(Integer)
     explicit = Column(Boolean, default=False)
     href = Column(String(length=150))
-    id = Column(String(length=50), unique=True, index=True)
     is_local = Column(Boolean, default=False)
     is_playable = Column(Boolean, default=True)
     name = Column(String(length=150))
@@ -82,9 +73,9 @@ class ArtistAlbums(Base):
     """
     __tablename__ = "artist_albums"
 
-    _id = Column(Integer, primary_key=True, index=True)
-    artist_id = Column(Integer, ForeignKey("artists._id"))
-    album_id = Column(Integer, ForeignKey("albums._id"))
+    id = Column(Integer, primary_key=True, index=True)
+    artist_id = Column(Integer, ForeignKey("artists.id"))
+    album_id = Column(Integer, ForeignKey("albums.id"))
 
     artist = relationship("Artist", backref=backref("artist_albums", cascade="delete-orphan"))
     album = relationship("Album", backref=backref("artist_albums"))
@@ -96,9 +87,9 @@ class ArtistTracks(Base):
     """
     __tablename__ = "artist_tracks"
 
-    _id = Column(Integer, primary_key=True, index=True)
-    artist_id = Column(Integer, ForeignKey("artists._id"))
-    track_id = Column(Integer, ForeignKey("tracks._id"))
+    id = Column(Integer, primary_key=True, index=True)
+    artist_id = Column(Integer, ForeignKey("artists.id"))
+    track_id = Column(Integer, ForeignKey("tracks.id"))
 
     artist = relationship("Artist", backref=backref("artist_tracks", cascade="delete-orphan"))
     track = relationship("Track", backref=backref("artist_tracks"))

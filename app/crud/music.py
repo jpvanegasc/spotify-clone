@@ -6,7 +6,7 @@ import app.schemas.music as schemas
 # Artists
 
 def get_artist(db: Session, artist_id: int):
-    return db.query(models.Artist).filter(models.Artist._id == artist_id).first()
+    return db.query(models.Artist).filter(models.Artist.id == artist_id).first()
 
 def get_artist_by_name(db: Session, artist_name: str):
     return db.query(models.Artist).filter(models.Artist.name == artist_name).first()
@@ -39,7 +39,7 @@ def delete_artist(db: Session, db_artist: models.Artist):
 # Albums
 
 def get_album(db: Session, album_id: int):
-    return db.query(models.Album).filter(models.Album._id == album_id).first()
+    return db.query(models.Album).filter(models.Album.id == album_id).first()
 
 def get_albums(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Album).offset(skip).limit(limit).all()
@@ -69,7 +69,7 @@ def delete_album(db: Session, db_album: models.Album):
 # Tracks
 
 def get_track(db: Session, track_id: int):
-    return db.query(models.Track).filter(models.Track._id == track_id).first()
+    return db.query(models.Track).filter(models.Track.id == track_id).first()
 
 def get_tracks(db: Session, skip: int=0, limit: int=100):
     return db.query(models.Track).offset(skip).limit(limit).all()
