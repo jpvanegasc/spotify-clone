@@ -78,7 +78,7 @@ class ArtistAlbums(Base):
     album_id = Column(Integer, ForeignKey("albums.id"))
 
     artist = relationship("Artist", backref=backref("artist_albums", cascade="delete-orphan"))
-    album = relationship("Album", backref=backref("artist_albums"))
+    album = relationship("Album", backref=backref("artist_albums", cascade="delete-orphan"))
 
 
 class ArtistTracks(Base):

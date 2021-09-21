@@ -14,7 +14,6 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     country = Column(String(length=2), default='US')
-    display_name = Column(String(length=50))
     email = Column(String(length=150), unique=True, index=True)
     href = Column(String(length=150))
     product = Column(String(length=50))

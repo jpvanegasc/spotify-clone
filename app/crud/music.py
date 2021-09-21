@@ -65,6 +65,13 @@ def update_album(db: Session, album: schemas.AlbumCreate, db_album: models.Album
     return db_album
 
 def delete_album(db: Session, db_album: models.Album):
+    artist_albums = db.query(models.ArtistAlbums).filter(models.ArtistAlbums.album_id == db_album.id).first()
+    db.delete(artist_albums)
+    tracks = db.query(models.Track).filter(models.Track.album_id == db_album.id).all()
+    for track in tracks:
+        artist_track = db.query(models.ArtistTracks).filter(models.ArtistTracks.track_id == track.id).first()
+        db.delete(artist_track)
+        db.delete(track)
     db.delete(db_album)
     db.commit()
     return

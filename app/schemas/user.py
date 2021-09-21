@@ -31,7 +31,6 @@ class Playlist(PlaylistBase):
 
 class UserBase(BaseModel):
     country: constr(max_length=2)
-    display_name: constr(max_length=50)
     email: constr(max_length=150)
     href: constr(max_length=150)
     product: constr(max_length=50)
